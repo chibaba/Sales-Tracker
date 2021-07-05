@@ -2,4 +2,4 @@
 /dist/
 /data/
 npm-debug.log
-.env**
+*env
