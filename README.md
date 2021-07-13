@@ -1,0 +1,2 @@
+# Sales-Tracker
+Sales Tracker application will allow users to keep track of their day-to-day expenses. Users who are signed in to their accounts will be able to add their sales records with details such as sales description, category, amount, and when the given sales was made or paid. The application will store these sales records and extract meaningful data patterns to give the user a visual representation of how cash flow fare as time progresses.
