@@ -83,9 +83,19 @@ today.setUTCHours(0,0,0,0)
         ObjectId(req.auth._id)}},
         { $group: { _id: "today", totalBought: {$sum: "$amount"}}}
         ],
-        yesterday: []
+        yesterday: [
+          { $match: {sold_on : { $gte: yesterday, $lt: today }, recorded_by: mongoose.Types.
+        ObjectId(req.auth._id)}},
+        {$group: { _id: "yesterday", totalBought: {$sum: "$amount"}}},
+        ]
       }
       }
     ])
+
+    let salesPreview = {month: currentPreview[0].month[0], today: currentPreview[0].today[0], yesterday: currentPreview[0].yesterday[0]}
+    res.json(salesPreview)
+  } catch (err) {
+    console.log(err)
+    return res.status(400).json({error: errorHandler.getErrorMessage(err)})
   }
 }
