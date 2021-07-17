@@ -148,4 +148,22 @@ const salesByCategory = async(req, res) => {
         }
       }
 
-      
+    const averageCategories = async (req, res) => {
+      const firstDay = new Date(req.query.firstDay)
+      const lastDay = new Date(req.query.lastDay)
+
+      try {
+        let categoryMonthlyAvg = await Sales.aggregate([
+          { $match:  { sold_on : {$gte : firstDay, $lte : lastDay}, recorded_by: mongoose.Types.ObjectId(req.auth._id)}},
+          { $group: { _id : {category: "$category"}, totalBought: {$sum: "$amount"}}},
+          {$group : { _id :  "$_id.category", avgBought: { $avg: "$totalBought"}}},
+          { $project: {x: '$_id', y: '$avgBought'}}
+        ]).exec()
+        res.json({monthAVG: categoryMonthlyAvg})
+      } catch (err) {
+        console.log(err)
+        return res.status(400).json({
+          error:  errorHandler.getErrorMessage(err)
+        })
+      }
+    }      
