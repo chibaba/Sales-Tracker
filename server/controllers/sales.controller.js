@@ -52,3 +52,40 @@ const listByUser = async(req, res) => {
     })
   }
 }
+
+const currentMonthReview = async(req, res) => {
+  const date = new Date(), y = date.getFullYear(), m = date.getMonth()
+  const firstDay = new Date(y, m, 1)
+  const lastDay = new Date(y, m + 1, 0)
+
+const today = new Date()
+today.setUTCHours(0,0,0,0)
+
+  const tomorrow = new Date()
+  tomorrow.setUTCHours(0,0,0,0)
+  tomorrow.setDate(tomorrow.getDate() + 1)
+
+  const yesterday = new Date()
+  yesterday.setUTCHours(0,0,0,0)
+  yesterday.setDate(yesterday.getDate() -1)
+
+  try {
+    let currentPreview = await Sales.aggregate([
+      { 
+        $facet:  { month: [
+          { $match : {sold_on : {$gte : firstDay, $lt: lastDay }, recorded_by: 
+           mongoose.Types.ObjectId(req.auth._id)
+        } },
+        {$group : { _id: "currentMonth", totalBought: {$sum: "$amount"}}}
+        ],
+        today: [
+          { $match: {sold_on : { $gte: today,  $lt: tomorrow},  recorded_by: mongoose.Types.
+        ObjectId(req.auth._id)}},
+        { $group: { _id: "today", totalBought: {$sum: "$amount"}}}
+        ],
+        yesterday: []
+      }
+      }
+    ])
+  }
+}
