@@ -32,3 +32,23 @@ const  salesByID = async(req, res, next, id) => {
     })
   }
 }
+
+const read = (req, res) => {
+  return res.json(req.sales)
+}
+
+const listByUser = async(req, res) => {
+  let  firstDay = req.query.firstDay
+  let lastDay = req.query.lastDay
+  
+  try {
+    let sales = await Sales.find({'$and':[{'sold_on': {'$gte': firstDay, '$lte': lastDay}}, 
+    {'recorded_by': req.auth._id}]}).sort('sold_on').populate('recorded_by', '_id name')
+    res.json(sales)
+  } catch (err) {
+    console.log(err)
+    return res.status(400).json({
+      error: errorHandler.getErrorMessage(err)
+    })
+  }
+}
