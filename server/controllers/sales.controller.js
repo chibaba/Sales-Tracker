@@ -167,3 +167,29 @@ const salesByCategory = async(req, res) => {
         })
       }
     }      
+
+    const yearlySales = async (req, res) => {
+      const y = req.query.year
+      const firstDay = new Date(y, 0, 1)
+      const lastDay = new Date(y, 12, 0)
+
+      try {
+        let  totalMonthly = await Sales.aggregate( [
+          { $match: { sold_on: { $gte: firstDay, $lt: lastDay }, recorded_by: mongoose.Types.ObjectId(req.auth._id)}},
+          { $group: { _id:{$month: "$sold_on"}, totalBought: {$sum: "$amount"}}},
+          { $project: {x: '$_id', y: '$totalBought'}}
+        ]).exec()
+        res.json({monthTot: totalMonthly})
+      } catch(err) {
+        console.log(err)
+        return res.status(400).json({error: errorHandler.getErrorMessage(err)})
+      }
+    }
+
+    const plotSales = async(req, res) => {
+      const date = new Date(req.query.month), y = date.getFullYear(), m=date.getMonth()
+      const firstDay = new Date(y, m, 1)
+      const lastDay = new Date(y,m + 1, 0)
+
+      
+    }
