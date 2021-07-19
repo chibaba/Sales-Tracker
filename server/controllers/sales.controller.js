@@ -191,5 +191,64 @@ const salesByCategory = async(req, res) => {
       const firstDay = new Date(y, m, 1)
       const lastDay = new Date(y,m + 1, 0)
 
-      
+      try {
+        let totalMonthly = await Sales.aggregate( [
+          { $match: { sold_on: { $gte : firstDay, $lt: lastDay }, recorded_by: mongoose.Types.ObjectId(req.auth._id)}},
+          { $project: {x:{$dayOfMonth: '$sold_on'}, y:'$amount'}}
+        ]).exec()
+        res.json(totalMonthly)
+      } catch(err) {
+        console.log(err)
+        return res.status(400).json({
+          error: errorHandler.getErrorMessage(err)
+        })
+      }
     }
+
+    const update = async(req, res) => {
+      try {
+        let sales = req.sales
+        sales = extend(sales, req.body)
+        sales.updated = Date.now()
+        await sales.save()
+        res.json(sales)
+      } catch(err) {
+        return res.status(400).json({
+          error: errorHandler.getErrorMessage(err)
+        })      }
+      }
+        const remove = async (req, res) => {
+          try {
+            let sales = req.sales
+            let deletedSales = await sales.remove()
+            res.json(deletedSales)
+          } catch (err) {
+            return res.status(400).json({
+              error: errorHandler.getErrorMessage(err)
+            })
+          }
+      }
+      
+      const hasAuthorization = (req, res, next) => {
+        const authorized = req.sales && req.auth && req.sales.recorded_by._id == req.auth._id
+        if (!(authorized)) {
+          return res.status('403').json({
+            error: "User is not authorized"
+          })
+        }
+        next()
+    }
+    export default {
+      create,
+      salesByID,
+      read,
+      currentMonthReview,
+      salesByCategory,
+      averageCategories,
+      yearlySales,
+      plotSales,
+      listByUser,
+      remove,
+      update,
+      hasAuthorization
+  }
