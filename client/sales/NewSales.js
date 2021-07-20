@@ -49,5 +49,91 @@ const useStyles = makeStyles(theme => ({
 export default function NewSales() {
   const classes = useStyles()
 
-  
+  const [values, setValues] = useState({
+
+    title: '',
+    category: '',
+    amount: '',
+    sold_on: new Date(), 
+    notes: '',
+    error: ''
+  })
+
+  const jwt = auth.isAuthenticated()
+
+  const handleChange = name => event => {
+    setValues({...values, [name]: event.target.value
+    })
+  }
+
+  const handleDateChange = date => {
+    setValues({...values, sold_on: date})
+  }
+
+  const clickSubmit = ()=> {
+    const sales= {
+      title: values.title || undefined,
+      category: values.category || undefined,
+      amount: values.amount || undefined,
+      sold_on: values.sold_on || undefined,
+      notes: values.notes || undefined,
+          }
+          create({
+            t: jwt.token
+          }, sales).then((data) => {
+            if(data.error) {
+              setValues({...values, error: data.error})
+            } else {
+                setValues({...values, error: ' ', redirect: true})
+            }
+          })
+  }
+
+  if(values.redirect) {
+    return (<Redirect to ={'/'} />)
+  }
+  return (<div>
+    <Card className={classes.card}>
+      <CardContent>
+        <Typography type="headline" component="h2" className={classes.title}>
+          Sales Record
+        </Typography>
+        <br/>
+        <TextField id="title" label="Title" className={classes.textField} value={values.title} onChange={handleChange('title')} margin="normal" /><br/>
+        <TextField id="amount" label="Amount ($)" className={classes.textField} value={values.amount} onChange={handleChange('amount')} margin="normal" type="number" /><br />
+        <TextField  id="category" label="Category" className={classes.textField} value={values.category} onChange={handleChange('category')} margin="normal"/><br />
+        <br />
+        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+          <DateTimePicker
+          label="sold_on"
+          className={ classes.textField}
+          views={["year", "month", "date"]}
+          value={values.sold_on}
+          onChange={handleDateChange}
+          showTodayButton
+          />
+        </MuiPickersUtilsProvider>
+        <br/>
+        <br/>
+        <TextField
+        id="multiline-flexible"
+        label="Notes"
+        rows="2"
+        value={values.notes}
+        onChange={handleChange('notes')}
+        className={classes.textField}
+        margin="normal" />
+        <br/><br/>
+        {
+          values.error && (<Typography component="p" color="error">
+            <Icon color="error" className={classes.error}>error</Icon>
+            {values.error }
+          </Typography>)
+        }
+      </CardContent>  
+      <CardActions>
+        <Button color="primary" variant="contained" onClick={clickSubmit} className={classes.submit}>Submit</Button>
+      </CardActions>
+    </Card>
+  </div>)
 }
