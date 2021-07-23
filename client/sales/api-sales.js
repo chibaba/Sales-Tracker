@@ -113,4 +113,47 @@ const  plotSales = async (params, credentials, signal) => {
     }
   }
 
-  
+  const update = async(params, credentials, sales) => {
+    try {
+      let response = await fetch('/api/sales/' + params.salesId, { 
+        method: 'PUT',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' +credentials.t
+        },
+        body: JSON.stringify(sales)
+      } )
+      return await response.json()
+    } catch(err) {
+      console.log(err)
+    }
+  }
+
+  const remove = async(params, credentials) => {
+    try {
+      let response = await fetch('/api/sales/' + params.salesId, { 
+        method: 'DELETE', 
+        headers: { 
+          'Accept': 'application/json', 
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + credentials.t
+        }
+      })
+      return await response.json()
+    } catch(err) {
+      console.log(err)
+    }
+  }
+
+  export {
+    create,
+    listByUser,
+    currentMonthPreview,
+    salesByCategory,
+    yearlySales,
+    plotSales,
+    read,
+    update,
+    remove
+  }
