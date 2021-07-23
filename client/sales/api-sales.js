@@ -83,3 +83,34 @@ const yearlySales = async (params, credentials, signal) => {
     console.log(err)
   }
 }
+
+const  plotSales = async (params, credentials, signal) => {
+  const query = queryString.stringify(params)
+  try {
+    let  response = await fetch('/api/sales/plot?'+query, {
+      method: 'GET',
+      signal: signal,
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ' + credentials.t
+      }
+    })
+    return await response.json()
+  }catch(err) {
+    console.log(err)
+  }
+}
+
+  const read = async(params, signal) => {
+    try {
+      let response = await fetch('/api/auction' + params.auctionId, {
+        method: 'GET',
+        signal: signal,
+      })
+      return response.json()
+    } catch(err) {
+      console.log(err)
+    }
+  }
+
+  
