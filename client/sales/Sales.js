@@ -71,3 +71,66 @@ const useStyles = makeStyles(theme => ({
     marginTop: 4
   }
 }))
+
+export default function Sales() {
+  const classes = useStyles()
+  const [redirectToSignin, setRedirectToSignin] = useState(false)
+  const [saved, setSaved] = useState(false)
+  const [error, setError] = useState('')
+  const [sales, setSales] = useState([])
+  const jwt = auth.isAuthenticated()
+  const date = new Date(), y = date.getFullYear(), m=date.getMonth()
+  const [firstDay, setFirstDay] = useState(new Date(y, m, 1))
+  const [lastDay, setLastDay] = useState(new Date(y, m +1, 0))
+  useEffect(() =>{
+    const abortController = new AbortController()
+    const signal = abortController.signal
+    listByUser({firstDay: firstDay, lastDay: lastDay}, {t: jwt.token}, signal).then((data) =>{
+      if(data.error) {
+        setRedirectToSignin(true)
+      } else {
+        setSales(data)
+      }
+    })
+    return function cleanup(){
+      abortController.abort()
+    }
+  },  [])
+
+  const handleSearchFieldChange = name => {
+    if(name=='firstDay') {
+      setFirstDay(date)
+    } else {
+      setLastDay(date)
+    }
+  }
+
+  const searchClicked = () => {
+    listByUser({firstDay: firstDay, lastDay: lastDay}, {t: jwt.token}).then((data) => {
+      if(data.error) {
+        setRedirectToSignin(true)
+      } else {
+        setSales(data)
+      }
+    })
+  }
+  const handleChange = (name, index) => event => {
+    const updatedSales = [...sales]
+    updatedSales[index][name] = event.target.value
+    setSales(updatedSales)
+  }
+  const clickUpdate = (index) => {
+    let sale = sales[index]
+    update({
+     salesId: sale._id
+    }, {t: jwt.token}, sale).then((data) => {
+      if (data.error) {
+        setError(data.error)
+      } else {
+        setSaved(true)
+        setTimeout(() =>{setSaved(false)}, 3000)
+      }
+    })
+  }
+  
+}
