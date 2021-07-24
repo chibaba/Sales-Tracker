@@ -41,5 +41,33 @@ const useStyles = makeStyles(theme => ({
   panel: {
     border: '1px solid #58cd3d',
     margin: 6
+  },
+  info: {
+    marginRight: 32,
+    width: 90
+  },
+  amount: {
+    fontSize: '2em',
+    color: '#2bbd7e'
+  },
+  search: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    alignItems: 'center'
+  },
+  textField: {
+    margin: '8px 16px',
+    width: 240
+  },
+  buttons: {
+    textAlign: 'right'
+  },
+  status: {
+    marginRight: 8
+  },
+  date: {
+    fontSize: '1.1em',
+    color: '#88bb8b',
+    marginTop: 4
   }
 }))
