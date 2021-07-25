@@ -97,7 +97,7 @@ export default function Sales() {
     }
   },  [])
 
-  const handleSearchFieldChange = name => {
+  const handleSearchFieldChange = name => date =>{
     if(name=='firstDay') {
       setFirstDay(date)
     } else {
@@ -117,6 +117,11 @@ export default function Sales() {
   const handleChange = (name, index) => event => {
     const updatedSales = [...sales]
     updatedSales[index][name] = event.target.value
+    setSales(updatedSales)
+  }
+  const handleDateChange = index => date => {
+    const updatedSales = [...sales]
+    updatedSales[index].incurred_on = date
     setSales(updatedSales)
   }
   const clickUpdate = (index) => {
@@ -188,6 +193,41 @@ export default function Sales() {
                <TextField label="Title" className={classes.textField} value={sale.title} onChange={handleChange('title', index)} margin="normal" />
                <TextField label="Amount($)" className={classes.textField} value={sale.amount} onChange={handleChange('amount', index)} margin="normal" type="number" />
              </div>
+             <div>
+               <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                 <DateTimePicker
+                 label="sold_on"
+                 className={classes.textField}
+                 views={["year", "month", "date"]}
+                 value={sale.sold_on}
+                 onChange={handleDateChange(index)}
+                 showTodayButton
+                 />
+               </MuiPickersUtilsProvider>
+               <TextField label="Category" className={classes.textField} value={sale.category} onChange={handleChange('category', index)} margin="normal" />
+                           </div>
+                           <TextField
+                           label="Notes"
+                           multiline
+                           rows="2"
+                           value={sale.notes}
+                           onChange={handleChange('notes', index)}
+                           className={classes.textField}
+                           margin="normal"
+                           />
+                           <div className={classes.buttons}>
+                             {
+                               error && (<Typography component="p" color="error">
+                                 <Icon color="error" className={classes.error}>error</Icon>
+                                 {error}
+                               </Typography>)
+                             }
+                             {
+                               saved && <Typography component="span" color="secondary" className={classes.status}>Saved</Typography>
+                             }
+                             <Button color="primary" variant="contained" onClick={()=> clickUpdate(index)} className={classes.submit}>Update</Button>
+                             <DeleteSales sale={sale} onRemove={removeSale} />
+                           </div>
            </ExpansionPanelDetails>
          </span>
        })}
