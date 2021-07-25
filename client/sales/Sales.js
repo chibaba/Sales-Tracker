@@ -132,5 +132,23 @@ export default function Sales() {
       }
     })
   }
-  
+   const removeSale = (sale) => {
+     const updatedSales = [...sales]
+     const index  = updatedSales.indexOf(sale)
+     updatedSales.splice(index, 1)
+     setSales(updatedSales)
+   }
+   if(redirectToSignin) {
+     return <Redirect to="/signin"/>
+   }
+   return (
+     <div className={classes.root}>
+       <div className={classes.search}>
+         <MuiPickersUtilsProvider utils={DateFnsUtils}>
+           <DatePicker
+           
+         </MuiPickersUtilsProvider>
+       </div>
+     </div>
+   )
 }
