@@ -146,9 +146,51 @@ export default function Sales() {
        <div className={classes.search}>
          <MuiPickersUtilsProvider utils={DateFnsUtils}>
            <DatePicker
-           
+            disableFuture
+            format="dd/MM/yyyy"
+            label="SHOWING RECORDS FROM"
+            className={classes.textField}
+            views={["year", "month", "date"]}
+            value={firstDay}
+            onChange={handleSearchFieldChange('firstDay')}
+            />
+            <DatePicker
+            format="dd/MM/yyyy"
+            label="TO"
+            className={classes.textField}
+            views={["year", "month", "date"]}
+            value={lastDay}
+            onChange={handleSearchFieldChange('lastDay')}
+            />
          </MuiPickersUtilsProvider>
+         <Button variant="contained" color="secondary" onClick={searchClicked}>GO</Button>
        </div>
+
+       {sales.map((sale, index) => {
+         return <span key={index}>
+           <ExpansionPanelSummary
+           expandIcon={<Edit />}
+           >
+             <div className={classes.info}>
+               <Typography className={classes.amount}>$ {sale.amount}</Typography><Divider style={{marginTop: 4, marginBottom: 4}} />
+               <Typography className={classes.date}>{new Date(sale.sold_on).toLocaleDateString()}</Typography>
+             </div>
+             <div>
+               <Typography className={classes.heading}>{sale.title}</Typography>
+               <Typography className={classes.notes}>
+                 {sale.notes}
+               </Typography>
+             </div>
+           </ExpansionPanelSummary>
+           <Divider />
+           <ExpansionPanelDetails style={{display: 'block'}}>
+             <div>
+               <TextField label="Title" className={classes.textField} value={sale.title} onChange={handleChange('title', index)} margin="normal" />
+               <TextField label="Amount($)" className={classes.textField} value={sale.amount} onChange={handleChange('amount', index)} margin="normal" type="number" />
+             </div>
+           </ExpansionPanelDetails>
+         </span>
+       })}
      </div>
    )
 }
