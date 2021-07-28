@@ -67,6 +67,23 @@ const salesByCategory = async (credentials, signal) => {
   }
 }
 
+const averageCategories = async (params, credentials, signal) => {
+  const query = queryString.stringify(params)
+  try {
+    let response = await fetch('/api/sales/category/averages?'+query, {
+      method: 'GET',
+      signal: signal,
+      headers: {
+        'Accept': 'application/json',
+        'Authorization': 'Bearer ' + credentials.t
+      }
+    })
+    return await response.json()
+  }catch(err){
+    console.log(err)
+  }
+}
+
 const yearlySales = async (params, credentials, signal) => {
   const query = queryString.stringify(params)
   try {
@@ -151,6 +168,7 @@ const  plotSales = async (params, credentials, signal) => {
     listByUser,
     currentMonthPreview,
     salesByCategory,
+    averageCategories,
     yearlySales,
     plotSales,
     read,
