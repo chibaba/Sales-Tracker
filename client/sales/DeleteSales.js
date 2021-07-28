@@ -11,14 +11,14 @@ import DialogTitle from '@material-ui/core/DialogTitle'
 import auth from '../auth/auth-helper'
 import {remove} from './api-sales'
 
-export default function DeleteSales(props) {
+export default function DeleteSale(props) {
   const [open, setOpen] = useState(false)
 
   const jwt = auth.isAuthenticated()
   const clickButton=() => {
     setOpen(true)
   }
-  const deleteSales = () => {
+  const deleteSale = () => {
     remove({
       salesId: props.sale._id
     }, {t: jwt.token}).then((data) => {
@@ -30,11 +30,35 @@ export default function DeleteSales(props) {
       }
     })
   }
-  const handleResponseClose = () => {
+  const handleRequestClose = () => {
     setOpen(false)
   }
 
   return (<span>
-    
+    <IconButton aria-label="Delete" onClick={clickButton}>
+      <DeleteIcon />
+    </IconButton>
+
+    <Dialog open={open} onClose={handleRequestClose}>
+        <DialogTitle>{"Delete "+props.sale.title}</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Confirm to delete your expense record {props.sale.title}.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleRequestClose} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={deleteSale} color="secondary" autoFocus="autoFocus">
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
   </span>)
+}
+
+DeleteSale.propTypes = {
+  sale: PropTypes.object.isRequired,
+  onRemove: PropTypes.func.isRequired
 }
