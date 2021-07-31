@@ -14,6 +14,12 @@ const isActive = (history, path) => {
   else
     return {color: '#ffffff'}
 }
+const isButtonActive = (history, path) => {
+  if(history.location.pathname.includes(path))
+  return {color: '#fffde7', backgroundColor: '#2bbc7e', marginRight: 9}
+  else
+  return {clolor: '2bbc7e', backgroundColor: '#ffffff', border: '1px solid #2bbd7e', marginRight:9}
+}
 const Menu = withRouter(({history}) => (
   <AppBar position="static">
     <Toolbar>
@@ -25,13 +31,16 @@ const Menu = withRouter(({history}) => (
           <HomeIcon/>
         </IconButton>
       </Link>
+      {
+        auth.isAuthenticated() && (<span></span>)
+      }
       <Link to="/users">
         <Button style={isActive(history, "/users")}>Users</Button>
       </Link>
       {
         !auth.isAuthenticated() && (<span>
-          <Link to="/signup">
-            <Button style={isActive(history, "/signup")}>Sign up
+          <Link to={"/sales/all"}>
+            <Button style={isActive(history, "/sales/all")}>Sales
             </Button>
           </Link>
           <Link to="/signin">

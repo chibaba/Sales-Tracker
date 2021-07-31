@@ -7,11 +7,11 @@ import Typography from '@material-ui/core/Typography'
 import landingImg from '../assets/images/sales-manager.jpg'
 import  {Link} from 'react-router-dom'
 import auth from '../auth/auth-helper'
-import SalesOverview from './'
+import SalesOverview from '../sales/SalesOverview'
 
 const useStyles = makeStyles(theme => ({
   card: {
-    maxWidth: 600,
+    maxWidth: 700,
     margin: 'auto',
     marginTop: theme.spacing(5),
     marginBottom: theme.spacing(5)
@@ -29,7 +29,7 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: '#ededed',
     borderBottom: '1px solid #d0d0d0',
     '& a':{
-      color: '#3f4771'
+      color: '#3fc77c'
     } 
   }
 }))
@@ -37,17 +37,28 @@ const useStyles = makeStyles(theme => ({
 export default function Home(){
   const classes = useStyles()
     return (
-        <Card className={classes.card}>
+      <>
+      {
+        auth.isAuthenticated()  &&
+        <SalesOverview/>
+      }
+      {
+         !auth.isAuthenticated() && typeof window !== "undefined" &&
+         (
+          <Card className={classes.card}>
           <Typography variant="h6" className={classes.title}>
             Home Page
           </Typography>
-          <CardMedia className={classes.media} image={landingImg} title="Unicorn Bicycle"/>
+          <CardMedia className={classes.media} image={landingImg} title="Tracking Sales Expenses"/>
           <Typography variant="body2" component="p" className={classes.credit} color="textSecondary">Photo by <a href="https://unsplash.com/@boudewijn_huysmans" target="_blank" rel="noopener noreferrer">Boudewijn Huysmans</a> on Unsplash</Typography>
           <CardContent>
             <Typography variant="body1" component="p">
-              Welcome to Fullstack web development
+              Welcome!!! Your Sales Tracker for SMEs. <Link to = '/signup'>Sign up</Link> or <Link to='/signin'>sign in</Link> to get started
             </Typography>
           </CardContent>
         </Card>
+         )
+      }
+    </>
     )
 }
