@@ -118,12 +118,12 @@ export default function Home(){
   }
     return (
         <Card className={classes.card}>
-            <Typography variant="h4" className={classes.title2} color="textPrimary" style={{textAlign:'center'}}>You've Bought</Typography>
+            <Typography variant="h4" className={classes.title2} color="textPrimary" style={{textAlign:'center'}}>You've Sold</Typography>
             <div style={{display:'flex', justifyContent:'center', alignItems:'center'}}>
-                <Typography component="span" className={classes.totalBought}>${salePreview.month ? salePreview.month.totalSpent : '0'} <span style={{display: 'block', fontSize:'0.3em'}}>so far this month</span></Typography>
+                <Typography component="span" className={classes.totalBought}>${salePreview.month ? salePreview.month.totalSold : '0'} <span style={{display: 'block', fontSize:'0.3em'}}>so far this month</span></Typography>
                 <div style={{margin:'20px 20px 20px 30px' }}>
-                  <Typography variant="h5" className={classes.spent} color="primary">${salePreview.today ? salePreview.today.totalSpent : '0'} <span className={classes.day}>today</span></Typography>
-                  <Typography variant="h5" className={classes.spent} color="primary">${salePreview.yesterday ? salePreview.yesterday.totalSpent: '0'} <span className={classes.day}>yesterday </span></Typography>
+                  <Typography variant="h5" className={classes.spent} color="primary">${salePreview.today ? salePreview.today.totalSold : '0'} <span className={classes.day}>today</span></Typography>
+                  <Typography variant="h5" className={classes.spent} color="primary">${salePreview.yesterday ? salePreview.yesterday.totalSold: '0'} <span className={classes.day}>yesterday </span></Typography>
                   <Link to="/sales/all"><Typography variant="h6">See more</Typography></Link>
                 </div>
               </div>

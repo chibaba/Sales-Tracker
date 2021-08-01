@@ -14,7 +14,7 @@ import DeleteSales from './DeleteSales'
 import Icon  from '@material-ui/core/Icon'
 
 import {Redirect} from 'react-router-dom'
-import DateFnsUtils from '@date-io/date-fns/build/date-fns-utils';
+import DateFnsUtils from '@date-io/date-fns'
 import { DateTimePicker, DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers"
 
 
@@ -23,8 +23,8 @@ const useStyles = makeStyles(theme => ({
     width: '90%',
     maxWidth: '800px',
     margin: 'auto',
-    marginTop: '40',
-    marginBottom: '40'
+    marginTop: 40,
+    marginBottom: 40
   },
   heading: {
     fontSize: '1.5em',
@@ -173,6 +173,7 @@ export default function Sales() {
 
        {sales.map((sale, index) => {
          return <span key={index}>
+         <ExpansionPanel className={classes.panel}>
            <ExpansionPanelSummary
            expandIcon={<Edit />}
            >
@@ -229,6 +230,7 @@ export default function Sales() {
                              <DeleteSales sale={sale} onRemove={removeSale} />
                            </div>
            </ExpansionPanelDetails>
+           </ExpansionPanel>
          </span>
        })}
      </div>
