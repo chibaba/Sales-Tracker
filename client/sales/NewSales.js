@@ -15,7 +15,7 @@ import { DateTimePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 
 const useStyles = makeStyles(theme => ({
   card: {
-    maxWidth: 589,
+    maxWidth: 600,
     margin: 'auto',
     textAlign: 'center',
     marginTop: theme.spacing(5),
@@ -71,7 +71,7 @@ export default function NewSales() {
   }
 
   const clickSubmit = ()=> {
-    const sales= {
+    const sale= {
       title: values.title || undefined,
       category: values.category || undefined,
       amount: values.amount || undefined,
@@ -80,7 +80,7 @@ export default function NewSales() {
           }
           create({
             t: jwt.token
-          }, sales).then((data) => {
+          }, sale).then((data) => {
             if(data.error) {
               setValues({...values, error: data.error})
             } else {
@@ -90,7 +90,7 @@ export default function NewSales() {
   }
 
   if(values.redirect) {
-    return (<Redirect to ={'/'} />)
+    return (<Redirect to ={'/'}/>)
   }
   return (<div>
     <Card className={classes.card}>
@@ -133,6 +133,7 @@ export default function NewSales() {
       </CardContent>  
       <CardActions>
         <Button color="primary" variant="contained" onClick={clickSubmit} className={classes.submit}>Submit</Button>
+        <Link to='/myauctions' className={classes.submit}><Button variant="contained">Cancel</Button></Link>
       </CardActions>
     </Card>
   </div>)

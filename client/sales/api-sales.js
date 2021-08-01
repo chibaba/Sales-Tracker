@@ -1,5 +1,5 @@
 import queryString from 'query-string';
-const create = async (credentials, sales) => {
+const create = async (credentials, sale) => {
 
   try {
     let response = await fetch('/api/sales/', {
@@ -9,7 +9,7 @@ const create = async (credentials, sales) => {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer ' + credentials.t
       },
-      body: JSON.stringify(sales)
+      body: JSON.stringify(sale)
     })
     return await response.json()
   } catch(err) {
